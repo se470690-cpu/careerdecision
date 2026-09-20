@@ -23,7 +23,7 @@ export default function CoachCard({ facts, decision, onDecide }) {
       const r = await fetch('/api/coach', { method: 'POST', headers: { 'content-type': 'application/json', ...(code ? { 'x-coach-code': code } : {}) }, body: JSON.stringify({ facts, question }) });
       const j = await r.json().catch(() => ({}));
       if (r.status === 401) { setNeedCode(true); return setSt((s) => ({ ...s, status: 'idle', msg: code ? '접근 코드가 맞지 않아요.' : '접근 코드를 입력해 주세요.' })); }
-      if (!r.ok) return setSt((s) => ({ ...s, status: 'error', msg: r.status === 501 ? '서버에 AI 키가 설정되지 않아서 아직 쓸 수 없어요. 위의 계산 결과는 그대로 볼 수 있어요.' : j.error || '잠시 후 다시 시도해 주세요.' }));
+      if (!r.ok) return setSt((s) => ({ ...s, status: 'error', msg: r.status === 501 ? '서버에 AI 키가 설정되지 않아서 아직 쓸 수 없어요. 위의 계산 결과는 그대로 볼 수 있어요.' : `${j.error || '잠시 후 다시 시도해 주세요.'}${j.detail ? ` (${j.detail})` : ''}` }));
       try { sessionStorage.setItem('careerdecision:coach', code); } catch (e) { /* 무시 */ }
       if (question) setAns(j); else setSt({ status: 'ok', data: j, msg: '' });
       if (question) setSt((s) => ({ ...s, status: 'ok', msg: '' }));

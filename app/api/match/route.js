@@ -24,7 +24,11 @@ export async function POST(req) {
       headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({ model: process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5-20251001', max_tokens: 2000, system: SYSTEM, messages: [{ role: 'user', content: user }] }),
     });
-    if (!r.ok) return Response.json({ error: `upstream ${r.status}` }, { status: 502 });
+    if (!r.ok) {
+      let msg = '';
+      try { const e = await r.json(); msg = (e.error && e.error.message) || ''; } catch (e2) { /* 생략 */ }
+      return Response.json({ error: `upstream ${r.status}${msg ? `: ${msg.slice(0, 160)}` : ''}` }, { status: 502 });
+    }
     const j = await r.json();
     const text = (j.content || []).map((c) => c.text || '').join('');
     const m = text.match(/\[[\s\S]*\]/);

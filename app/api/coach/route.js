@@ -34,6 +34,7 @@ export async function POST(req) {
     if (!out) return Response.json({ error: 'AI 응답을 읽지 못했어요. 다시 시도해 주세요.' }, { status: 502 });
     return Response.json(out);
   } catch (e) {
-    return Response.json({ error: 'AI 코치 호출에 실패했어요.' }, { status: 502 });
+    console.error('[coach]', e && e.message);
+    return Response.json({ error: 'AI 코치 호출에 실패했어요.', detail: String((e && e.message) || '').slice(0, 200) }, { status: 502 });
   }
 }
