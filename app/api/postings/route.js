@@ -9,6 +9,7 @@ const SOURCES = [
   { companyId: 'daangn', run: () => fetchDaangn() },
   { companyId: 'catchtable', run: () => fetchGreeting({ base: 'https://career.catchtable.co.kr', companyId: 'catchtable', listPath: '/ko/jobs' }) },
   { companyId: 'kakaomobility', run: () => fetchGreeting({ base: 'https://kakaomobility.career.greetinghr.com', companyId: 'kakaomobility', listPath: '/ko/guide' }) },
+  { companyId: 'yeogi', run: () => fetchGreeting({ base: 'https://gccompany.career.greetinghr.com', companyId: 'yeogi', listPath: '/ko/apply' }) },
   { companyId: 'kakaoent', run: () => fetchGreeting({ base: 'https://careers.kakaoenterprise.com', companyId: 'kakaoent', listPath: '/ko/job' }) },
 ];
 

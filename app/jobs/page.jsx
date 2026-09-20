@@ -12,7 +12,7 @@ const MapView = dynamic(() => import('../../components/MapView'), { ssr: false, 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 export default function Jobs() {
-  const { state, results, feed, visit, toggleList, setSetup } = useApp();
+  const { state, results, feed, visit, toggleList, setSetup, transitOn, loadTransit } = useApp();
   const ok = useRequireSetup();
   const [active, setActive] = useState(null);
   useEffect(() => { if (ok) visit('jobs'); }, [ok, visit]);
@@ -39,11 +39,22 @@ export default function Jobs() {
     <>
       <Stepper />
       <PageHead crumb="06 후보 탐색" title="내 생활 반경 안의 후보를 좁혀볼게요" desc={`통근 ${state.setup.maxMin}분(추정) 반경 안에서 요건까지 수집한 공고 ${f.initial}개를 살펴봤어요.`} />
+      <section className="card pad-l transit-bar">
+        <div>
+          <p className="k">통근시간 기준</p>
+          <p className="sub">{transitOn ? `카카오 대중교통 경로 기준이에요. ${state.transit.msg}` : '지금은 직선거리로 추정한 시간이에요. 실제 대중교통 경로로 바꿀 수 있어요.'}</p>
+          {state.transit.status === 'off' || state.transit.status === 'error' ? <p className="msg" role="alert">{state.transit.msg}</p> : null}
+          <p className="fine dim">누르면 출발지 좌표와 회사 위치가 카카오 API로 전송돼요. 서버에 저장하지 않아요.</p>
+        </div>
+        <button type="button" className="btn primary" disabled={state.transit.status === 'loading'} onClick={loadTransit}>
+          {state.transit.status === 'loading' ? '조회 중이에요…' : transitOn ? '다시 조회하기' : '실제 대중교통 시간으로 계산하기'}
+        </button>
+      </section>
       <section className="split-map" id="map">
         <MapView home={home} reachKm={kmForMin(state.setup.maxMin)} items={items} activeId={active} onSelect={setActive} label={`통근 ${state.setup.maxMin}분 반경 (추정)`} />
         <aside className="card pad-l">
           <p className="k">공고 출처와 위치를 함께</p>
-          <p className="sub">기업 주소를 지도 위에 표시해요. 파란 점선 원은 설정한 통근시간의 직선거리 환산 반경이에요. 실제 경로 시간은 대중교통 API 연동 후 반영돼요.</p>
+          <p className="sub">기업 주소를 지도 위에 표시해요. 파란 점선 원은 설정한 통근시간의 직선거리 환산 반경이에요. 회사별 실제 대중교통 시간은 위에서 조회하면 카드에 나타나요.</p>
           <ul className="src">
             {withStatus.map((c) => (
               <li key={c.id}>
@@ -75,7 +86,7 @@ export default function Jobs() {
               <Bar value={o.career * 100} label="JD 매칭" />
               <Bar value={o.life * 100} label="생활" tone="gray" />
               <dl className="kv">
-                <div><dt>통근·출근</dt><dd>{o.min}분 · {o.unknownDays ? '정책 미확인' : `주 ${o.days}회`}</dd></div>
+                <div><dt>통근·출근</dt><dd>{o.min}분 {o.minSrc === 'transit' ? `(대중교통${o.transfers != null ? ` · 환승 ${o.transfers}회` : ''})` : '(추정)'} · {o.unknownDays ? '정책 미확인' : `주 ${o.days}회`}</dd></div>
                 <div><dt>마감</dt><dd>{fmtDate(o.p.deadline)}</dd></div>
               </dl>
               <div className="chips">{o.adjacent ? <span className="tag mute">인접 직무</span> : null}{tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>
@@ -105,7 +116,7 @@ export default function Jobs() {
         <article className="card pad-l blue-soft">
           <p className="k">생활 적합도 노트</p>
           <h2>단순 통근시간보다<br />출근 빈도가 더 중요해요</h2>
-          <p className="sub">주 5일 출근에 대한 부담을 반복해서 표현했다면, 편도 70분이어도 주 2회 출근인 후보가 편도 45분·주 5회 출근보다 생활 적합도가 높을 수 있어요. 환승 횟수는 대중교통 API를 연동한 뒤 반영돼요.</p>
+          <p className="sub">주 5일 출근에 대한 부담을 반복해서 표현했다면, 편도 70분이어도 주 2회 출근인 후보가 편도 45분·주 5회 출근보다 생활 적합도가 높을 수 있어요. 환승 횟수는 대중교통 경로를 조회하면 반영돼요(환승 1회마다 생활 적합도를 5%씩 낮춰요).</p>
         </article>
       </section>
 

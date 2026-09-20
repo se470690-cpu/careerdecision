@@ -80,7 +80,7 @@ export default function Setup() {
   return (
     <>
       <Stepper />
-      <PageHead crumb="02 나를 설정하기" title={`${s.name || '나'}의 취업 기준을 설정해볼게요`} desc="주소는 서버에 저장하지 않고 이 브라우저 탭 안에서만 생활권 분석에 사용해요. 이력서 파일도 브라우저에서만 읽어요." right={<button type="button" className="btn ghost" onClick={demo}>테스트 페르소나로 체험하기</button>} />
+      <PageHead crumb="02 나를 설정하기" title={`${s.name || '나'}의 취업 기준을 설정해볼게요`} desc="주소는 저장하지 않아요. 이력서 파일은 이 브라우저에서만 읽어요. (서버에 카카오 키가 설정돼 있으면 위치 검색과 대중교통 조회를 위해 입력한 지역이 카카오로 전송될 수 있어요.)" right={<button type="button" className="btn ghost" onClick={demo}>테스트 페르소나로 체험하기</button>} />
       <form className="form2" onSubmit={submit}>
         <section className="card pad-l">
           <div className="field">

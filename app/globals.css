@@ -310,6 +310,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .kv2 div { display: flex; justify-content: space-between; padding: 12px 14px; background: var(--soft); border-radius: 12px; }
 .kv2 dt { color: var(--sub); } .kv2 dd { font-weight: 600; }
 
+.transit-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.transit-bar .btn { flex: none; }
 /* 경험 구조화 */
 .exp { display: grid; gap: 14px; margin-top: 8px; }
 .exp-org { background: var(--soft); border-radius: 16px; padding: 18px 20px; display: grid; gap: 8px; }
