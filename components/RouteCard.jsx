@@ -1,12 +1,20 @@
 'use client';
+import { routeSummary } from '../lib/engine';
 
 const BADGE = { BUS: '버스', SUBWAY: '지하철', WALKING: '도보', ETC: '이동' };
 
 // 카카오 대중교통 경로를 "무엇을 타고, 어디서 어디까지, 몇 분" 순서로 보여 줍니다.
 export default function RouteCard({ route }) {
   if (!route || !route.legs) return null;
+  const rs = routeSummary(route);
   return (
     <div className="route">
+      {rs ? (
+        <div className="howto">
+          <p className="howto-h">이렇게 타요</p>
+          <ol>{rs.steps.map((t, i) => <li key={i}>{t}</li>)}</ol>
+        </div>
+      ) : null}
       <ol className="legs">
         {route.legs.map((l, i) => (
           <li key={i} className={`leg ${String(l.type).toLowerCase()}`}>

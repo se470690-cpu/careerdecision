@@ -55,6 +55,17 @@ export default function Preference() {
         <p className="note">{topC ? `저장한 공고에 “${CONCEPTS[topC[0]].n}” 관련 업무가 자꾸 나와요. 다음 추천에 이 취향을 반영할 수 있어요.` : '공고를 저장하거나 관심 없음으로 숨기면, 반복되는 패턴을 여기에 요약해 드려요.'}</p>
         {savedPosts.map((p) => <button key={p.id} type="button" className="txtbtn" onClick={() => toggleList('saved', p.id)}>{p.title.split(' - ')[0]} 저장 해제</button>)}
       </section>
+      {Object.keys(state.decisions || {}).length ? (
+        <section className="card pad-l">
+          <p className="k">내가 내린 결정</p>
+          <ul className="why">
+            {Object.entries(state.decisions).map(([id, d]) => {
+              const p = feed.postings.find((x) => x.id === id);
+              return <li key={id}><b>{p ? p.title.split(' - ')[0] : id}</b> <span>{({ apply: '지원할래요', hold: '더 볼게요', skip: '안 갈래요' })[d.choice]}</span>{d.note ? <em>{d.note}</em> : null}</li>;
+            })}
+          </ul>
+        </section>
+      ) : null}
       <section className="card pad-l privacy">
         <p className="k">내 데이터</p>
         <p className="sub">입력한 주소·이력서·선택 기록은 이 브라우저 탭의 임시 저장소에만 있어요. 탭을 닫으면 사라지고, 서버로 전송되지 않아요. (AI 정밀 매칭을 직접 누른 경우에만 해당 공고와 이력서 문장이 전송돼요.)</p>

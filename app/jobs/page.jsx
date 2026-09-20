@@ -7,6 +7,7 @@ import { COMPANIES } from '../../lib/data';
 import { kmForMin, CONCEPTS } from '../../lib/engine';
 import { Bar, PageHead, fmtDate, useRequireSetup, NeedSetup } from '../../components/Bits';
 import RouteCard from '../../components/RouteCard';
+import { routeSummary } from '../../lib/engine';
 import { Stepper } from '../../components/Shell';
 
 const MapView = dynamic(() => import('../../components/MapView'), { ssr: false, loading: () => <div className="mapwrap"><div className="map skeleton" /></div> });
@@ -87,6 +88,7 @@ export default function Jobs() {
         ) : results.ok.map((o, i) => {
           const tags = o.sc.rows.filter((r) => r.m.level === 'match').flatMap((r) => r.m.sharedLabels).filter((v, k, a) => a.indexOf(v) === k).slice(0, 3);
           const saved = state.saved.includes(o.p.id);
+          const rs = routeSummary(o.route);
           return (
             <article key={o.p.id} className={`card co${i === 0 ? ' first' : ''}${active === o.c.id ? ' active' : ''}`} onClick={() => setActive(o.c.id)}>
               <div className="co-h">
@@ -101,6 +103,7 @@ export default function Jobs() {
                 <div><dt>통근·출근</dt><dd>{o.min}분 {o.minSrc === 'transit' ? `(대중교통${o.transfers != null ? ` · 환승 ${o.transfers}회` : ''})` : '(추정)'} · {o.unknownDays ? '정책 미확인' : `주 ${o.days}회`}</dd></div>
                 <div><dt>마감</dt><dd>{fmtDate(o.p.deadline)}</dd></div>
               </dl>
+              {rs ? <p className="board"><b>타는 법</b>{rs.board}, {rs.alight}</p> : null}
               <div className="chips">{o.adjacent ? <span className="tag mute">인접 직무</span> : null}{tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>
               {o.route ? <details className="route-fold" onClick={(e) => e.stopPropagation()}><summary>가는 길 보기</summary><RouteCard route={o.route} /></details> : null}
               <p className="fine dim">{o.c.v ? '주소 확인' : '지역 기준 위치'} · {o.p.source} · {o.p.fetchedAt} 수집</p>

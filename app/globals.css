@@ -333,6 +333,56 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .fold-s { margin-top: 10px; font-size: 13px; }
 .fold-s summary { cursor: pointer; color: var(--sub); }
 .tlist { display: grid; gap: 4px; margin-top: 8px; color: #333d4b; }
+.howto { background: var(--accent-bg); border-radius: 14px; padding: 12px 14px; }
+.howto-h { font-size: 12.5px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.howto ol { display: grid; gap: 4px; padding-left: 20px; list-style: decimal; font-size: 14px; font-weight: 600; }
+.board { font-size: 13px; background: var(--accent-bg); color: #1b3f7a; border-radius: 10px; padding: 8px 10px; margin: 6px 0; line-height: 1.5; }
+.board b { margin-right: 8px; color: var(--accent); }
+.why { display: grid; gap: 4px; }
+.why h2 { font-size: 22px; line-height: 1.4; }
+.why-sec { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 18px; }
+.why-sec h3 { font-size: 16px; margin-bottom: 8px; }
+.conf { display: inline-block; align-self: start; font-size: 13px; padding: 5px 12px; border-radius: 999px; background: var(--bg); width: fit-content; }
+.conf b { margin-right: 6px; color: var(--sub); }
+.conf.high { background: var(--ok-bg); color: var(--ok); }
+.conf.mid { background: var(--warn-bg); color: var(--warn); }
+.conf.low { background: var(--no-bg); color: var(--no); }
+.conf.big { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.pts { display: grid; gap: 12px; margin-top: 10px; }
+.pts li { display: grid; grid-template-columns: 150px 1fr 110px; gap: 14px; align-items: center; font-size: 14px; }
+.pts small { display: block; color: var(--sub); font-size: 12px; font-weight: 400; }
+.pts b { text-align: right; }
+.rs { display: grid; gap: 12px; }
+.rs li { background: var(--soft); border-radius: 14px; padding: 14px 16px; }
+.rq { font-size: 12.5px; color: var(--sub); margin-bottom: 4px; }
+.ev { font-size: 14px; margin-bottom: 6px; }
+.ev b { display: block; color: var(--accent); font-size: 12.5px; margin-bottom: 2px; }
+.rk { display: grid; gap: 8px; font-size: 14px; }
+.rk li { display: flex; gap: 10px; align-items: flex-start; }
+.dot2 { width: 9px; height: 9px; border-radius: 50%; margin-top: 8px; flex: none; background: #b0b8c1; }
+.dot2.no { background: var(--no); } .dot2.warn { background: #f5a623; }
+.stab { display: grid; gap: 6px; }
+.stab li { display: flex; gap: 12px; align-items: center; font-size: 14px; padding: 8px 12px; border-radius: 12px; background: var(--soft); }
+.stab li b { min-width: 92px; }
+.stab li.same span { color: var(--ok); } .stab li.diff span { color: var(--warn); }
+.coach { display: grid; gap: 10px; }
+.coach-go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 4px; }
+.code, .ask input { border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 14px; background: #fff; }
+.code { width: 160px; }
+.coach-sum { font-size: 17px; font-weight: 700; line-height: 1.5; margin-top: 6px; }
+.coach-pts { display: grid; gap: 8px; margin: 8px 0; font-size: 14.5px; }
+.coach-pts li { background: var(--soft); border-radius: 12px; padding: 10px 14px; }
+.refs { display: inline-flex; gap: 4px; margin-left: 8px; vertical-align: middle; }
+.refs i { font-style: normal; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: var(--accent-bg); color: var(--accent); cursor: help; }
+.aq { background: var(--accent-bg); border-radius: 14px; padding: 12px 16px; }
+.aq ul { display: grid; gap: 4px; margin-top: 6px; padding-left: 18px; list-style: disc; font-size: 14.5px; }
+.ask { display: flex; gap: 8px; margin-top: 8px; }
+.ask input { flex: 1; }
+.coach-ans { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 14.5px; margin-top: 8px; }
+.coach-ans small { display: block; color: var(--sub); margin-top: 6px; }
+.journal { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 16px; display: grid; gap: 10px; }
+.journal h3 { font-size: 16px; }
+.journal textarea { min-height: 72px; margin: 0; }
 /* 경험 구조화 */
 .exp { display: grid; gap: 14px; margin-top: 8px; }
 .exp-org { background: var(--soft); border-radius: 16px; padding: 18px 20px; display: grid; gap: 8px; }

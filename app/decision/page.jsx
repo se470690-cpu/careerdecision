@@ -2,21 +2,18 @@
 import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useApp } from '../../lib/store';
-import { computeAll, explainDecision, DEFAULT_W } from '../../lib/engine';
+import { computeAll, explainDecision, explainRecommendation, stabilityCheck, PRESETS, DEFAULT_W } from '../../lib/engine';
 import { Ring, PageHead, useRequireSetup, NeedSetup } from '../../components/Bits';
 import { Stepper } from '../../components/Shell';
 import RouteCard from '../../components/RouteCard';
+import WhyCard from '../../components/WhyCard';
+import CoachCard from '../../components/CoachCard';
+import { buildCoachFacts, revealedTop } from '../../lib/coachFacts';
 
-const PRESETS = [
-  ['균형 있게', { career: 40, life: 30, pref: 30 }],
-  ['성장 우선', { career: 60, life: 15, pref: 25 }],
-  ['출퇴근 우선', { career: 25, life: 55, pref: 20 }],
-  ['선호 우선', { career: 25, life: 20, pref: 55 }],
-];
 const same = (a, b) => a.career === b.career && a.life === b.life && a.pref === b.pref;
 
 export default function Decision() {
-  const { state, results, feed, W, ivResult, patch, setSetup, toggleList, visit } = useApp();
+  const { state, results, feed, W, ivResult, patch, setSetup, toggleList, visit, transitOn, decide } = useApp();
   const ok = useRequireSetup();
   useEffect(() => { if (ok) visit('decision'); }, [ok, visit]);
   const base = useMemo(() => {
@@ -24,6 +21,17 @@ export default function Decision() {
     const bw = state.iv.answers.length >= 3 ? ivResult.W : DEFAULT_W;
     return computeAll({ setup: state.setup, resume: state.resume, W: bw, scope: ivResult.scope, workFlex: ivResult.workFlex, hidden: state.hidden }, feed.postings).ok[0];
   }, [ok, state.setup, state.resume, state.iv.answers, ivResult, state.hidden, feed.postings]);
+  const why = useMemo(() => {
+    if (!ok || !results.ok[0]) return null;
+    const input = { setup: state.setup, resume: state.resume, scope: ivResult.scope, workFlex: ivResult.workFlex, hidden: state.hidden, transit: transitOn ? state.transit.by : null };
+    const stability = stabilityCheck(input, feed.postings, results.ok[0].p.id);
+    return explainRecommendation(results.ok[0], results.ok, { W, maxMin: state.setup.maxMin, years: Number(state.setup.years) || 0, stability });
+  }, [ok, results, state.setup, state.resume, state.hidden, state.transit, transitOn, ivResult, feed.postings, W]);
+  const facts = useMemo(() => {
+    if (!why || !results.ok[0]) return null;
+    const done = state.iv.answers.length >= 3;
+    return buildCoachFacts({ top: results.ok[0], list: results.ok, ex: why, setup: state.setup, W, answers: state.iv.answers, stated: done ? state.setup.top : null, revealed: done ? revealedTop(ivResult.revealed) : null });
+  }, [why, results, state.setup, state.iv.answers, W, ivResult]);
   if (!ok) return <NeedSetup />;
   const top = results.ok[0];
   const ex = top ? explainDecision(top, results.ok) : null;
@@ -56,6 +64,7 @@ export default function Decision() {
             <article className="card pad-l">
               <p className="k">추천하는 이유</p>
               <ul className="expl">{ex.items.map((it, i) => <li key={i} className={it.ok ? 'ok' : 'no'}><span>{it.ok ? '✓' : '✕'}</span>{it.t}</li>)}</ul>
+              <a className="lnk" href="#why">자세한 근거 보기</a>
             </article>
             <article className="card pad-l">
               <p className="k">출근 경로 (카카오 대중교통)</p>
@@ -72,6 +81,8 @@ export default function Decision() {
           </div>
         </section>
       )}
+      {why ? <WhyCard ex={why} /> : null}
+      {facts && top ? <CoachCard key={top.p.id} facts={facts} decision={(state.decisions || {})[top.p.id]} onDecide={(c, n) => decide(top.p.id, c, n)} /> : null}
       {results.ok.length > 1 ? (
         <section className="card pad-l">
           <p className="k">지원 우선순위</p>

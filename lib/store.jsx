@@ -8,6 +8,7 @@ export const INITIAL = {
   setup: { name: '', addr: '', home: null, geoSrc: '', years: 3, role: 'plan', inds: [], maxMin: 60, mode: 'hybrid', env: ['대중교통'], top: 'growth' },
   resume: '', fileName: '', iv: { answers: [] }, W: null, hidden: [], saved: [], visited: {},
   transit: { key: '', by: {}, status: 'idle', msg: '' },
+  decisions: {},
 };
 
 const Ctx = createContext(null);
@@ -61,6 +62,8 @@ export function Providers({ children, initial }) {
     }
   }, [state.setup.home, feed.postings, homeKey]);
 
+  const decide = useCallback((id, choice, note) => setState((s) => ({ ...s, decisions: { ...(s.decisions || {}), [id]: { choice, note, at: Date.now() } } })), []);
+
   const ivResult = useMemo(() => applyInterview(state.iv.answers), [state.iv.answers]);
   const W = state.W || (state.iv.answers.length >= 3 ? ivResult.W : DEFAULT_W);
   const an = useMemo(() => analyzeResume(state.resume), [state.resume]);
@@ -69,6 +72,6 @@ export function Providers({ children, initial }) {
     [state.setup, state.resume, W, ivResult, state.hidden, feed.postings, transitOn, state.transit.by],
   );
 
-  const value = { state, patch, setSetup, visit, reset, toggleList, hydrated, feed, ivResult, W, an, results, transitOn, loadTransit };
+  const value = { state, patch, setSetup, visit, reset, toggleList, hydrated, feed, ivResult, W, an, results, transitOn, loadTransit, decide };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
