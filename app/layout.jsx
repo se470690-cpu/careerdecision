@@ -6,9 +6,11 @@ import Shell from '../components/Shell';
 export const metadata = {
   title: 'CareerDecision · 내 생활 반경에서 지원할 회사 고르기',
   description: '이력서와 출퇴근 거리, 고른 기준을 보고 공고 중에서 나한테 맞는 곳을 추려 주는 취업 서비스',
+  icons: { icon: '/icon-192.png', apple: '/apple-icon.png' },
+  appleWebApp: { capable: true, title: 'CareerDecision', statusBarStyle: 'default' },
 };
 
-export const viewport = { width: 'device-width', initialScale: 1 };
+export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#3182f6' };
 
 export default function RootLayout({ children }) {
   return (

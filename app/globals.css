@@ -428,3 +428,29 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
   .mcnt { grid-template-columns: repeat(2, auto); }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+
+/* ───────── 앱처럼 쓰는 모바일 화면 ───────── */
+.tabbar { display: none; }
+* { -webkit-tap-highlight-color: transparent; }
+@media (max-width: 720px) {
+  html { -webkit-text-size-adjust: 100%; }
+  body { overscroll-behavior-y: none; }
+  .side, .topnav, .sync { display: none !important; }
+  .top { padding-top: env(safe-area-inset-top, 0px); }
+  .main { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 900; background: rgba(255, 255, 255, .96); backdrop-filter: saturate(1.4) blur(10px); border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)); }
+  .tabbar a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 52px; border-radius: 12px; color: #8b95a1; font-size: 11px; font-weight: 600; }
+  .tabbar a.act { color: var(--accent); }
+  .tabbar a.lock:not(.act) { opacity: .55; }
+  /* 입력칸은 16px 이상이어야 iOS가 확대하지 않아요 / 손가락 크기에 맞게 */
+  input, textarea, select { font-size: 16px; }
+  .btn, .chip, .tabs button { min-height: 44px; }
+  .transit-bar { flex-direction: column; align-items: stretch; }
+  .transit-bar .btn { width: 100%; }
+  .pts li { grid-template-columns: 1fr; gap: 6px; }
+  .pts b { text-align: left; }
+  .ask { flex-direction: column; }
+  .coach-go .btn { width: 100%; }
+  .why h2, .coach h2 { font-size: 19px; }
+  .leg { grid-template-columns: 50px 1fr auto; }
+}
