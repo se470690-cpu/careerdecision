@@ -12,7 +12,7 @@ import { Stepper } from '../../components/Shell';
 const PLACES = ['동작구', '송파구', '강남구', '판교역', '강서구'];
 const MINS = [30, 45, 60, 90];
 const MODES = [['office', '출근'], ['hybrid', '하이브리드'], ['remote', '원격']];
-const TOPS = [['growth', '직무 성장'], ['commute', '통근 편의'], ['worklife', '워라밸'], ['mode', '근무 방식']];
+const TOPS = [['growth', '성장'], ['commute', '출퇴근 거리'], ['worklife', '워라밸'], ['mode', '근무 방식']];
 const ENVS = ['식당', '카페', '편의점', '대중교통'];
 
 export default function Setup() {
@@ -74,13 +74,13 @@ export default function Setup() {
   function demo() {
     patch({ resume: SAMPLE_RESUME, fileName: '샘플 이력서' });
     setSetup({ name: '김하린', addr: '강서구', years: 3, role: 'plan' });
-    setFileMsg('가상 페르소나의 샘플 이력서를 채웠어요. 실제 개인정보가 아니에요.');
+    setFileMsg('가상 인물의 샘플 이력서를 채웠어요. 실제 개인정보가 아니에요.');
   }
 
   return (
     <>
       <Stepper />
-      <PageHead crumb="02 나를 설정하기" title={`${s.name || '나'}의 취업 기준을 설정해볼게요`} desc="주소는 저장하지 않아요. 이력서 파일은 이 브라우저에서만 읽어요. (서버에 카카오 키가 설정돼 있으면 위치 검색과 대중교통 조회를 위해 입력한 지역이 카카오로 전송될 수 있어요.)" right={<button type="button" className="btn ghost" onClick={demo}>테스트 페르소나로 체험하기</button>} />
+      <PageHead crumb="02 나를 설정하기" title={`${s.name || '나'}의 취업 기준을 정해 볼게요`} desc="주소는 저장하지 않아요. 이력서 파일은 이 브라우저에서만 읽어요. (서버에 카카오 키가 설정돼 있으면 위치 검색과 대중교통 조회를 위해 입력한 지역이 카카오로 전송될 수 있어요.)" right={<button type="button" className="btn ghost" onClick={demo}>샘플로 체험해 보기</button>} />
       <form className="form2" onSubmit={submit}>
         <section className="card pad-l">
           <div className="field">
@@ -120,7 +120,7 @@ export default function Setup() {
           <div className="field">
             <span className="lab">지금 생각하는 1순위</span>
             <div className="chips">{TOPS.map(([k, t]) => <Chip key={k} on={s.top === k} onClick={() => setSetup({ top: k })}>{t}</Chip>)}</div>
-            <p className="hint">나중에 인터뷰에서 드러난 실제 선택과 비교해 볼게요.</p>
+            <p className="hint">나중에 질문에서 실제로 고른 것과 비교해 볼게요.</p>
           </div>
           <div className="field">
             <span className="lab">주변에서 중요하게 보는 환경 <em className="soft">이후 버전에서 반영</em></span>
@@ -139,7 +139,7 @@ export default function Setup() {
             <textarea value={state.resume} onChange={(e) => patch({ resume: e.target.value, fileName: '' })} placeholder="파일 대신 경력·프로젝트를 문장으로 붙여 넣어도 돼요. 문장 하나하나가 매칭 근거로 쓰여요." />
           </div>
           <div className="submit-row">
-            <button className="btn primary lg" type="submit" disabled={busy}>{busy ? '위치를 찾는 중이에요' : 'AI가 나를 이해하기'}</button>
+            <button className="btn primary lg" type="submit" disabled={busy}>{busy ? '위치를 찾는 중이에요' : '분석 시작하기'}</button>
             <p className="msg" role="alert">{msg}</p>
           </div>
         </section>

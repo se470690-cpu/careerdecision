@@ -2,7 +2,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '../../lib/store';
-import { Ring, PageHead, useRequireSetup } from '../../components/Bits';
+import { Ring, PageHead, useRequireSetup, NeedSetup } from '../../components/Bits';
 import { Stepper } from '../../components/Shell';
 
 const LV = { match: ['연결', 'ok'], bridge: ['보완', 'warn'], gap: ['근거 없음', 'no'] };
@@ -27,7 +27,7 @@ export default function Match() {
       return { ...r, level, sent, reason, block: sent ? block : null, aiUsed: !!a };
     });
   }, [cur, ai, an.sents]);
-  if (!ok) return <p className="loading">불러오는 중이에요…</p>;
+  if (!ok) return <NeedSetup />;
   if (!cur) return (<><Stepper /><PageHead crumb="07 의미 기반 매칭" title="매칭할 후보가 아직 없어요" desc="후보 탐색에서 조건에 맞는 공고가 나오면 여기서 요건과 이력서 근거를 비교해요." /><Link className="btn primary" href="/jobs">후보 탐색으로</Link></>);
   const cnt = { match: rows.filter((r) => r.level === 'match').length, bridge: rows.filter((r) => r.level === 'bridge').length, gap: rows.filter((r) => r.level === 'gap').length };
   const mustRows = rows.filter((r) => r.kind === 'must');
@@ -48,13 +48,13 @@ export default function Match() {
   return (
     <>
       <Stepper />
-      <PageHead crumb="07 의미 기반 매칭" title="이력서의 경험이 JD에서 어떻게 연결되는지" desc="단어가 같은지가 아니라, 실제로 해결한 문제와 요구사항이 같은 방향인지 비교했어요." right={<span className="pill soft">{ai.id === cur.p.id && Object.keys(ai.map).length ? 'AI 정밀 매칭' : '규칙 기반 매칭'} · {rel}% 연결</span>} />
+      <PageHead crumb="07 의미 기반 매칭" title="이력서 경험이 공고 요건과 어떻게 이어지는지" desc="같은 단어를 썼는지가 아니라, 실제로 풀어 본 문제가 공고가 원하는 것과 같은 방향인지 봤어요." right={<span className="pill soft">{ai.id === cur.p.id && Object.keys(ai.map).length ? 'AI 정밀 매칭' : '규칙 기반 매칭'} · {rel}% 연결</span>} />
       <div className="tabs" role="tablist">
         {list.map((o, i) => <button key={o.p.id} role="tab" aria-selected={o.p.id === cur.p.id} className={o.p.id === cur.p.id ? 'on' : ''} onClick={() => patch({ focus: o.p.id })}>{i + 1}. {o.c.name} · {o.p.title.split(' - ')[0].replace('Product', 'P.').slice(0, 22)}</button>)}
       </div>
       <section className="card pad-l match-head">
         <div><p className="k">{cur.c.name} · {cur.p.team}</p><h2>{cur.p.title}</h2><a className="lnk" href={cur.p.url} target="_blank" rel="noopener noreferrer">공고 원문 보기</a>{cur.p.reqNote ? <p className="fine dim">{cur.p.reqNote}</p> : null}</div>
-        <div className="ringbox"><Ring value={rel} size={112} label="RELEVANCE" dark={false} /></div>
+        <div className="ringbox"><Ring value={rel} size={112} label="연결도" dark={false} /></div>
         <div className="mcnt"><div><b>{cnt.match}</b><span>연결됨</span></div><div><b>{cnt.bridge}</b><span>보완 필요</span></div><div><b>{cnt.gap}</b><span>근거 없음</span></div><div><b>{mustRows.filter((r) => r.level === 'match').length}/{mustRows.length}</b><span>핵심 요건</span></div></div>
       </section>
       <section className="pairs">
@@ -75,14 +75,14 @@ export default function Match() {
       <section className="split2">
         <article className="card pad-l">
           <p className="k">AI 정밀 매칭 (선택)</p>
-          <p className="sub">서버에 API 키가 설정된 경우, 이 공고의 요건과 이력서 문장이 Anthropic API로 전송돼 의미 단위로 다시 판단해요. 누르기 전에는 아무것도 전송되지 않아요.</p>
+          <p className="sub">서버에 API 키가 설정된 경우, 이 공고의 요건과 이력서 문장이 Anthropic API로 전송돼서, 뜻을 기준으로 다시 판단해요. 누르기 전에는 아무것도 전송되지 않아요.</p>
           <button type="button" className="btn ghost" disabled={ai.busy} onClick={runAi}>{ai.busy ? '비교 중이에요' : 'AI로 다시 매칭하기'}</button>
           <p className="fine" role="status">{ai.msg}</p>
         </article>
         <article className="card pad-l accent-soft">
-          <p className="k">NEXT MOVE</p>
+          <p className="k">다음 단계</p>
           <h2>최종 판단 보기</h2>
-          <p className="sub">직무·생활·선호 적합도를 합쳐 지원 우선순위와 이유를 확인해요.</p>
+          <p className="sub">직무·생활·선호를 합쳐서 어디부터 지원할지, 왜 그런지 확인해요.</p>
           <Link className="action" href="/decision">지원 우선순위로 이동</Link>
         </article>
       </section>

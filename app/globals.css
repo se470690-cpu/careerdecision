@@ -41,6 +41,10 @@ ul, ol { padding: 0; list-style: none; }
 .side b { display: block; font-size: 14px; color: inherit; line-height: 1.25; }
 .side a:not(.act) b { color: var(--ink); }
 .side small { font-size: 11.5px; opacity: .7; }
+.side li a.lock:not(.act) { opacity: .6; }
+.side li a.lock:not(.act) .num { background: #eef0f3; }
+.side .num.ok { background: var(--accent-bg); color: var(--accent); }
+.gate { max-width: 640px; }
 .status { margin-top: 18px; background: #fff; border-radius: 16px; padding: 14px; }
 .status p { font-size: 12.5px; color: var(--sub); display: flex; justify-content: space-between; margin-bottom: 8px; }
 .status p b { color: var(--accent); }
@@ -312,6 +316,23 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 
 .transit-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .transit-bar .btn { flex: none; }
+.route { display: grid; gap: 8px; }
+.legs { display: grid; gap: 6px; }
+.leg { display: grid; grid-template-columns: 54px 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--soft); font-size: 13.5px; }
+.leg b { display: block; line-height: 1.3; }
+.leg small { display: block; color: var(--sub); font-size: 12px; }
+.leg em { font-style: normal; font-weight: 700; color: var(--ink); }
+.lg-b { justify-self: start; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #e8ebef; color: #4e5968; }
+.leg.bus .lg-b { background: #e8f3ff; color: #1b64da; }
+.leg.subway .lg-b { background: #e6f6ee; color: #0a7a3f; }
+.route-sum { font-size: 13.5px; }
+.route-sum .lnk { margin: 0 0 0 10px; font-size: 13px; }
+.route-fold { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 8px; }
+.route-fold summary { cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--accent); }
+.route-fold[open] summary { margin-bottom: 8px; }
+.fold-s { margin-top: 10px; font-size: 13px; }
+.fold-s summary { cursor: pointer; color: var(--sub); }
+.tlist { display: grid; gap: 4px; margin-top: 8px; color: #333d4b; }
 /* 경험 구조화 */
 .exp { display: grid; gap: 14px; margin-top: 8px; }
 .exp-org { background: var(--soft); border-radius: 16px; padding: 18px 20px; display: grid; gap: 8px; }
